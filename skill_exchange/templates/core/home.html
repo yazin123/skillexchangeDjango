@@ -1,0 +1,15 @@
+<!-- templates/core/home.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="text-center my-5">
+    <h1>Welcome to Skill Exchange Platform</h1>
+    <p class="lead">Connect with others to learn and teach skills</p>
+    {% if not user.is_authenticated %}
+        <div class="mt-4">
+            <a href="{% url 'register' %}" class="btn btn-primary mx-2">Register</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-primary mx-2">Login</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

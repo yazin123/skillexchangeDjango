@@ -1,0 +1,104 @@
+<!-- templates/core/session_list.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">My Sessions</h2>
+
+    <!-- Teaching Sessions -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="h5 mb-0">Sessions I'm Teaching</h3>
+        </div>
+        <div class="card-body">
+            {% if teaching_sessions %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Skill</th>
+                                <th>Date & Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for session in teaching_sessions %}
+                                <tr>
+                                    <td>{{ session.student.username }}</td>
+                                    <td>{{ session.skill.name }}</td>
+                                    <td>{{ session.scheduled_time|date:"M d, Y h:i A" }}</td>
+                                    <td>
+                                        <span class="badge {% if session.status == 'PENDING' %}bg-warning
+                                                         {% elif session.status == 'ACCEPTED' %}bg-success
+                                                         {% elif session.status == 'COMPLETED' %}bg-info
+                                                         {% elif session.status == 'CANCELLED' %}bg-danger
+                                                         {% else %}bg-secondary{% endif %}">
+                                            {{ session.status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'session_detail' session.id %}" 
+                                           class="btn btn-sm btn-primary">View Details</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No teaching sessions found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Learning Sessions -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="h5 mb-0">Sessions I'm Learning</h3>
+        </div>
+        <div class="card-body">
+            {% if learning_sessions %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Teacher</th>
+                                <th>Skill</th>
+                                <th>Date & Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for session in learning_sessions %}
+                                <tr>
+                                    <td>{{ session.teacher.username }}</td>
+                                    <td>{{ session.skill.name }}</td>
+                                    <td>{{ session.scheduled_time|date:"M d, Y h:i A" }}</td>
+                                    <td>
+                                        <span class="badge {% if session.status == 'PENDING' %}bg-warning
+                                                         {% elif session.status == 'ACCEPTED' %}bg-success
+                                                         {% elif session.status == 'COMPLETED' %}bg-info
+                                                         {% elif session.status == 'CANCELLED' %}bg-danger
+                                                         {% else %}bg-secondary{% endif %}">
+                                            {{ session.status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'session_detail' session.id %}" 
+                                           class="btn btn-sm btn-primary">View Details</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No learning sessions found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

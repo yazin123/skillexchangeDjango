@@ -1,0 +1,70 @@
+<!-- templates/core/teacher_reviews.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Reviews for {{ teacher.username }}</h2>
+                    
+                </div>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2>Reviews for {{ teacher.username }}</h2>
+                    {% if user != teacher %}
+                        <a href="{% url 'compose_message' teacher.id %}" 
+                           class="btn btn-outline-primary">Message {{ teacher.username }}</a>
+                    {% endif %}
+                </div>
+                
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <h4>Average Rating</h4>
+                        <div class="display-4 mb-2">
+                            {% if average_rating %}
+                                {{ average_rating|floatformat:1 }} / 5.0
+                            {% else %}
+                                No ratings yet
+                            {% endif %}
+                        </div>
+                        <p class="text-muted">
+                            Based on {{ sessions|length }} review{{ sessions|length|pluralize }}
+                        </p>
+                    </div>
+
+                    {% if sessions %}
+                        <div class="reviews">
+                            {% for session in sessions %}
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <h5 class="card-title">{{ session.skill.name }}</h5>
+                                            <div class="text-warning">
+                                                {% for i in "12345"|make_list %}
+                                                    {% if forloop.counter <= session.review.rating %}
+                                                        ★
+                                                    {% else %}
+                                                        ☆
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            By {{ session.student.username }} on 
+                                            {{ session.review.created_at|date:"M d, Y" }}
+                                        </h6>
+                                        <p class="card-text">{{ session.review.comment }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-center">No reviews yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

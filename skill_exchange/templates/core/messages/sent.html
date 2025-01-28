@@ -1,0 +1,52 @@
+<!-- templates/core/messages/sent.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group mb-4">
+                <a href="{% url 'message_list' %}" class="list-group-item list-group-item-action">
+                    Inbox
+                </a>
+                <a href="{% url 'sent_messages' %}" class="list-group-item list-group-item-action active">
+                    Sent Messages
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Sent Messages</h3>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="list-group">
+                            {% for message in messages %}
+                                <a href="{% url 'message_detail' message.id %}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{ message.subject }}</h5>
+                                        <small>{{ message.created_at|date:"M d, Y" }}</small>
+                                    </div>
+                                    <p class="mb-1">To: {{ message.receiver.username }}</p>
+                                    <small class="text-muted">
+                                        {{ message.content|truncatewords:20 }}
+                                    </small>
+                                    {% if message.read %}
+                                        <span class="badge bg-success">Read</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Unread</span>
+                                    {% endif %}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No sent messages.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

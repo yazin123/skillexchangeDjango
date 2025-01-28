@@ -1,0 +1,43 @@
+<!-- templates/core/find_matches.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Find Teachers</h2>
+
+    {% if not teachers_by_skill %}
+        <div class="alert alert-info">
+            <p>No matches found. Try adding more skills you want to learn!</p>
+            <a href="{% url 'add_skill' %}" class="btn btn-primary mt-2">Add Skills</a>
+        </div>
+    {% endif %}
+
+    {% for skill_name, teachers in teachers_by_skill.items %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="h5 mb-0">{{ skill_name }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for teacher in teachers %}
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ teacher.user.username }}</h5>
+                                    <p class="card-text">Proficiency: {{ teacher.proficiency }}</p>
+                                    <div class="d-flex gap-2">
+                                        <a href="{% url 'request_session' teacher.user_id teacher.skill_id %}" 
+                                           class="btn btn-primary btn-sm">Request Session</a>
+                                        <a href="{% url 'compose_message' teacher.user_id %}" 
+                                           class="btn btn-outline-primary btn-sm">Message Teacher</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

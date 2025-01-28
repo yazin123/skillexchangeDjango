@@ -1,0 +1,77 @@
+<!-- templates/core/skill_list.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>My Skills</h2>
+        <a href="{% url 'add_skill' %}" class="btn btn-primary">Add New Skill</a>
+    </div>
+
+    <div class="row">
+        <!-- Teaching Skills -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Skills I'm Teaching</h3>
+                </div>
+                <div class="card-body">
+                    {% if teaching_skills %}
+                        <div class="list-group">
+                            {% for skill in teaching_skills %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-1">{{ skill.skill.name }}</h5>
+                                        <small>Level: {{ skill.get_proficiency_display }}</small>
+                                    </div>
+                                    <form action="{% url 'delete_user_skill' skill.id %}" method="POST" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm" 
+                                                onclick="return confirm('Are you sure you want to remove this skill?')">
+                                            Remove
+                                        </button>
+                                    </form>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">You haven't added any teaching skills yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning Skills -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Skills I'm Learning</h3>
+                </div>
+                <div class="card-body">
+                    {% if learning_skills %}
+                        <div class="list-group">
+                            {% for skill in learning_skills %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-1">{{ skill.skill.name }}</h5>
+                                        <small>Level: {{ skill.get_proficiency_display }}</small>
+                                    </div>
+                                    <form action="{% url 'delete_user_skill' skill.id %}" method="POST" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Are you sure you want to remove this skill?')">
+                                            Remove
+                                        </button>
+                                    </form>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">You haven't added any learning skills yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
